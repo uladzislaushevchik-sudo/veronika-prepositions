@@ -8,22 +8,19 @@
 <body>
 <p style="font-family:system-ui;text-align:center;margin-top:40px">Загрузка…</p>
 <script>
-const parts = [];
-async function load() {
-  for (let i = 0; i < 3; i++) {
-    const r = await fetch('data/part' + i + '.txt');
-    parts.push(await r.text());
-  }
-  const b64 = parts.join('');
-  const bin = atob(b64);
+async function go() {
+  const parts = await Promise.all([0,1].map(i => fetch('p'+i+'.txt').then(r => r.text())));
+  const bin = atob(parts.join(''));
   const bytes = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  const html = new TextDecoder('utf-8').decode(bytes);
-  document.open();
-  document.write(html);
-  document.close();
+  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+  const html = await new Response(stream).text();
+  document.open(); document.write(html); document.close();
 }
-load().catch(e => { document.body.innerHTML = '<p style="color:red;text-align:center">Ошибка загрузки: ' + e + '</p>'; });
+go().catch(e => {
+  document.body.innerHTML = '<p style="font-family:system-ui;text-align:center;color:red">Ошибка: '+e+
+  '</p><p style="text-align:center"><a href="https://sharehtml.zhenjia.dev/v/REHDrcKEZE/">Запасная ссылка</a></p>';
+});
 </script>
 </body>
 </html>
