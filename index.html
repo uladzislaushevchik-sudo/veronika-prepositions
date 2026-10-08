@@ -9,7 +9,8 @@
 <p style="font-family:system-ui;text-align:center;margin-top:40px">Загрузка…</p>
 <script>
 async function go() {
-  const parts = await Promise.all([0,1].map(i => fetch('p'+i+'.txt').then(r => r.text())));
+  const names = ['c0_0.txt','c0_1.txt','c0_2.txt','c1_0.txt','c1_1.txt','c1_2.txt'];
+  const parts = await Promise.all(names.map(n => fetch(n).then(r => r.text())));
   const bin = atob(parts.join(''));
   const bytes = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
