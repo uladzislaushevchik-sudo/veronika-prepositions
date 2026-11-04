@@ -7,7 +7,7 @@
 <p style="font-family:system-ui;text-align:center;margin-top:40px">Загрузка…</p>
 <script>
 async function go() {
-  const names = ['sp0.txt', 'sp1.txt', 'sp2.txt'];
+  const names = ['s0.txt','s1.txt','s2.txt','s3.txt'];
   const parts = await Promise.all(names.map(n => fetch(n).then(r => r.text())));
   const bin = atob(parts.join(''));
   const bytes = new Uint8Array(bin.length);
@@ -17,8 +17,7 @@ async function go() {
   document.open(); document.write(html); document.close();
 }
 go().catch(e => {
-  document.body.innerHTML = '<p style="font-family:system-ui;text-align:center;color:red">Ошибка: '+e+
-  '</p><p style="text-align:center">Открой файл Veronika_Spain_Survival_Interactive.html</p>';
+  document.body.innerHTML = '<p style="font-family:system-ui;text-align:center;color:red">Ошибка загрузки</p>';
 });
 </script>
 </body></html>
